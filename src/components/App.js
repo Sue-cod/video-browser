@@ -1,53 +1,61 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
+import SearchBar from './SearchBar';
+import youtube from '../api/youtube';
+import VideoList from './VideoList';
+import VideoDetail from './VideoDetail';
+import 'semantic-ui-css/semantic.min.css';
+
+
+/*import React, { Component } from "react";
 import SearchBar from "./SearchBar";
 import youtube from "../api/youtube";
 import VideoList from "./VideoList";
 import VideoDetail from "./VideoDetail";
-import 'semantic-ui-css/semantic.min.css';
+import 'semantic-ui-css/semantic.min.css';*/
 
-export class App extends Component {
-  state = { videos: [], selectedVideo: null };
+class App extends Component {
+    state= { videos: [], selectedVideo: null };
 
-  componentDidMount() {
-    this.handelSubmit("Aurora-borealis");
-  }
+    componentDidMount() {
+        this.handleSubmit("Aurora-borealis");
+    }
 
-  handelSubmit = async (term) => {
-    const response = await youtube.get("/search", {
-      params: {
-        q: term,
-      },
-    });
+    handleSubmit = async (term) => {
+        const response = await youtube.get("/search", {
+            params: {
+                q: term,
+            },
+        });
 
-    this.setState({
-      videos: response.data.items,
-      selectedVideo: response.data.items[0],
-    });
-  };
+        this.setState({
+            videos: response.data.items,
+            selectedVideo: response.data.items[0],
+        });
+    };
 
-  handelSelectVideo = (video) => {
-    this.setState({ selectedVideo: video });
-  };
+    handleSelectVideo = (video) => {
+        this.setState({ selectedVideo: video });
+    };
 
-  render() {
-    return (
-      <div className="ui container">
-        <SearchBar onSubmit={this.handelSubmit} />
-        <div className="ui grid stackable container">
-          <div className="ui row">
-            <div className="eleven wide column">
-              <VideoDetail video={this.state.selectedVideo} />
-            </div>
-            <div className="five wide column">
-              <VideoList
-                videos={this.state.videos}
-                onVideoSelect={this.handelSelectVideo}
-              />
-            </div>
+ render() {
+      return (
+          <div className='ui container'>
+              <SearchBar onSubmit={this.handleSubmit} />
+              <div className='ui grid stackable container'>
+                  <div className='ui row'>
+                      <div className='eleven wide column'>
+                          <VideoDetail video={this.state.selectedVideo} />
+                      </div>
+                      <div className='five wide column'>
+                          <VideoList
+                            videos={this.state.videos}
+                            onVideoSelect={this.handleSelectVideo}
+                          />
+                      </div>
+                  </div>
+              </div>
           </div>
-        </div>
-      </div>
-    );
+      );
   }
 }
 
