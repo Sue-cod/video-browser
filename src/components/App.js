@@ -9,7 +9,7 @@ export class App extends Component {
   state = { videos: [], selectedVideo: null };
 
   componentDidMount() {
-    this.handelSubmit("React.js");
+    this.handelSubmit("Aurora-borealis");
   }
 
   handelSubmit = async (term) => {
