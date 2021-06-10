@@ -1,23 +1,18 @@
 import React, { Component } from "react";
-
-import youtube from "../api/youtube.js";
 import SearchBar from "./SearchBar";
-import VideoModule from "./videos/VideoModule";
+import youtube from "../api/youtube";
+import VideoList from "./VideoList";
+import VideoDetail from "./VideoDetail";
+import 'semantic-ui-css/semantic.min.css';
 
-class App extends Component {
-  //* App state
-  state = {
-    videos: [],
-    selectedVideo: null,
-  };
+export class App extends Component {
+  state = { videos: [], selectedVideo: null };
 
-  //* Set default search term
   componentDidMount() {
-    this.onTermSubmit("cats");
+    this.handelSubmit("React.js");
   }
 
-  //* User enters a search term
-  onTermSubmit = async term => {
+  handelSubmit = async (term) => {
     const response = await youtube.get("/search", {
       params: {
         q: term,
@@ -30,18 +25,27 @@ class App extends Component {
     });
   };
 
-  //[(Callback)] User selected video
-  onVideoSelect = video => {
-    this.setState({
-      selectedVideo: video,
-    });
+  handelSelectVideo = (video) => {
+    this.setState({ selectedVideo: video });
   };
 
   render() {
     return (
-      <div className="app ui container">
-        <SearchBar onTermSubmit={this.onTermSubmit} />
-        <VideoModule appState={this.state} onVideoSelect={this.onVideoSelect} />
+      <div className="ui container">
+        <SearchBar onSubmit={this.handelSubmit} />
+        <div className="ui grid stackable container">
+          <div className="ui row">
+            <div className="eleven wide column">
+              <VideoDetail video={this.state.selectedVideo} />
+            </div>
+            <div className="five wide column">
+              <VideoList
+                videos={this.state.videos}
+                onVideoSelect={this.handelSelectVideo}
+              />
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
